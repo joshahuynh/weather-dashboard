@@ -14,7 +14,6 @@
 
 .jumbotron {
     padding: 16px;
-    border-radius: 0;
 }
 
 .search-city-label {
@@ -45,18 +44,18 @@
 
 .uv-low {
     background-color: green;
-    border-radius: 5px;
+    border-radius: 2px;
     color: white;
 }
 
 .uv-mid {
     background-color: orange;
-    border-radius: 5px;
+    border-radius: 2px;
     color: white;
 }
 
 .uv-high {
     background-color: red;
-    border-radius: 5px;
+    border-radius: 2px;
     color: white;
 }
