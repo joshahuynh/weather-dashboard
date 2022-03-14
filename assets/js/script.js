@@ -2,11 +2,19 @@ var apiKey = "b1230e9ae6629f281894dc4555b0c16d";
 var currentCity = "";
 var lastCity = "";
 
+var handleErrors = function(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
+
 var currentConditions = function(event) {
     var city = $('#search-city').val();
     currentCity= $('#search-city').val();
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&APPID=" + apiKey;
     fetch(queryURL)
+    .then(handleErrors)
     .then(function(response) {
         return response.json();
     })
@@ -34,6 +42,7 @@ var currentConditions = function(event) {
         var uvQueryURL = "api.openweathermap.org/data/2.5/uvi?lat=" + latitude + "&lon=" + longitude + "&APPID=" + apiKey;
         uvQueryURL = "https://cors-anywhere.herokuapp.com/" + uvQueryURL;
         fetch(uvQueryURL)
+        .then(handleErrors)
         .then(function(response) {
             return response.json();
         })
@@ -55,6 +64,7 @@ var fiveDayForecast = function(event) {
     var city = $('#search-city').val();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=" + apiKey;
     fetch(queryURL)
+    .then(handleErrors)
         .then(function(response) {
             return response.json();
         })
@@ -77,6 +87,9 @@ var fiveDayForecast = function(event) {
                         <li>Temp: ${dayData.main.temp}&#8457;</li>
                         <br>
                         <li>Humidity: ${dayData.main.humidity}%</li>
+                        <br>
+                        <li>Wind: ${dayData.wind.speed}mph</li>
+
                     </ul>
                 </div>`;
             }
