@@ -9,44 +9,43 @@ var displayPanel = $('.form-control')
 var searchCityLabel = $("search-city-label")
 var pastCity = $(".pastCities")
 var displayRight = $('#content-right')
+var city;
 
-$(document).ready(function() {
-    if(localStorage.getItem('searchedCity')!==null){
-        var storage = JSON.parse(localStorage.getItem('searchedCity')) 
+$(document).ready(function() { 
+    if (localStorage.getItem('searchedCity')!==null)
+        var storage = JSON.parse(localStorage.getItem("searchedCity"))
         citySaved.push(storage);
-        console.log(citySaved)
-        loadSearchHistory(); 
-    } else {
-            var city=(displayPanel).val();
-            cityName = city;
-            citySaved.unshift(city);
-            searchCityLabel.val("");
-            saveLocalStorage();
-        }
-    })    
+        loadSearchHistory();
+    searchBtn.on("click",function(event){
+        event.preventDefault();
+        city = $(searchCity).val();
+        citySaved.unshift(city)
+        searchCity.val('')
+        currentPanel.empty();
+        fiveDayForecast.empty();
+        saveLocalStorage();
+        currentWeather();
+    })
+})    
 
 function currentWeather(){
-    var city = $(searchCity).val();
     var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&appid="+apiKey
     fetch(queryURL)
         .then(function(response){
             if (response.ok) {
                 response.json()
                 .then(function(data) { 
-                    if (data.length > 0) {
-                        console.log(data)  
+                    if (data.length > 0) {  
                         var lat = data[0].lat
                         var lon = data[0].lon
                         currentCity = data[0].name
-                        console.log(currentCity)
                         var weatherData = "https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon="+ lon + "&units=imperial&appid="+ apiKey
                         fetch(weatherData)
                             .then(function(res) {
                                 if (res.ok) {
-                                    displayRight.css("display","")
                                     res.json()
                                     .then(function(response) {
-                                        console.log(response)
+                                        displayRight.css("display", "")
                                         var icon = response.current.weather[0].icon
                                         var dayPanel = $('<div class="dayPanel">').css({"display":"flex", "justify-content":"space-between"})
                                         var cityName = $('<h3 class="cityName">').text(currentCity).css("margin-top", "32px")
@@ -136,35 +135,46 @@ function currentWeather(){
 }
 
 var saveLocalStorage = function() {
-    pastCity.empty();
+    pastCity.empty()
     localStorage.setItem('searchedCity', JSON.stringify(citySaved));
+    
     loadSearchHistory();
 }
 
 function loadSearchHistory() {
-    var searchHistoryArray = JSON.parse(localStorage.getItem('searchedCity')) 
+    var searchHistoryArray = JSON.parse(localStorage.getItem('searchedCity'))
+    console.log(searchHistoryArray)
     for (j = 0; j < searchHistoryArray.length; j++){       
     var searchHistory = $("<button class='col-12 btn btn-secondary btn-sm'>").text(searchHistoryArray[j]);
         searchHistory.attr("id","#search"+ [j])
-        searchHistory.css({"border-radius":"5px", "font-size":"15px"})
+        searchHistory.css({"border-radius":"5px", "font-size":"15px", "margin":"5px 0 5px 0"})
         searchHistory.appendTo(pastCity);
     }
 }
+
+$("ul").on("click", "button", function(event) {
+    event.preventDefault();
+    city = $(this).text();
+    currentPanel.empty();
+    fiveDayForecast.empty();
+    currentWeather();
+})
 
 $("#clear").click(function(event){
     event.preventDefault();
     event.stopPropagation();
     displayRight.css("display","none")
-    $(".no-city").text("")
     pastCity.empty();
     localStorage.clear();
     citySaved=[];
 });
 
-searchBtn.on("click", function(event) {
-    event.preventDefault();
-    currentWeather();
-})
+// searchBtn.on("click", function(event) {
+//     currentPanel.empty();
+//     fiveDayForecast.empty();
+//     event.preventDefault();
+//     currentWeather();
+// })
 
 
 
