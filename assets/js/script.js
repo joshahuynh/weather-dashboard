@@ -76,13 +76,13 @@ function currentWeather(){
                                         humidity.appendTo(currentPanel)
                                         uvIndex.appendTo(currentPanel)
                                         uvi.appendTo(uvIndex)
-
+                                
                                         var uv = response.current.uvi;
                                         if (uv<=2) {
                                             uvi.css("background-color", "green")
-                                        } else if (uvi>2 && uvi<=5) {
+                                        } else if (uv>2 && uv<=5) {
                                             uvi.css("background-color", "yellow")
-                                        } else if (uvi>5 && uvi<=7) {
+                                        } else if (uv>5 && uv<=7) {
                                             uvi.css("background-color", "orange")
                                         } else {
                                             uvi.css("background-color", "red")
@@ -92,7 +92,7 @@ function currentWeather(){
                                         var forecastDiv = $('<div class= "row">').css({"display":"flex", "margin-left":"10px"})
                                         for (var i = 1; i < 6; i++) {
                                             var fiveDayIcon = response.daily[i].weather[0].icon
-                                            var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px 10px 5px 0"})
+                                            var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px 10 px 5px 0"})
                                             var dailyTemp = $('<p>').text("Temp: " + (response.daily[i].temp.day) + "°F")
                                             var iconimg = $('<img>').attr("src", "https://openweathermap.org/img/wn/"+fiveDayIcon+"@2x.png")
                                             var dailyDate = $('<p>').text(moment.unix(response.daily[i].dt).format("MM/DD/YYYY"))
