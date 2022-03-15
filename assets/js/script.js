@@ -3,10 +3,30 @@ var currentPanel = $("#current-weather");
 var fiveDayForecast = $("#five-day-forecast");
 var searchBtn = $('#search-button')
 var searchCity = $('#search-city')
+var cityHistory = $('#city-results')
+var citySaved = []
+var displayPanel = $('.form-control')
+var searchCityLabel = $("search-city-label")
+var pastCity = $(".pastCities")
+var displayRight = $('#content-right')
+
+$(document).ready(function() {
+    if(localStorage.getItem('searchedCity')!==null){
+        var storage = JSON.parse(localStorage.getItem('searchedCity')) 
+        citySaved.push(storage);
+        console.log(citySaved)
+        loadSearchHistory(); 
+    } else {
+            var city=(displayPanel).val();
+            cityName = city;
+            citySaved.unshift(city);
+            searchCityLabel.val("");
+            saveLocalStorage();
+        }
+    })    
 
 function currentWeather(){
     var city = $(searchCity).val();
-    console.log(city)
     var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&appid="+apiKey
     fetch(queryURL)
         .then(function(response){
@@ -23,6 +43,7 @@ function currentWeather(){
                         fetch(weatherData)
                             .then(function(res) {
                                 if (res.ok) {
+                                    displayRight.css("display","")
                                     res.json()
                                     .then(function(response) {
                                         console.log(response)
@@ -112,9 +133,38 @@ function currentWeather(){
                 catchError.text("")
             }, 2000)
         })
-    }        
+}
+
+var saveLocalStorage = function() {
+    pastCity.empty();
+    localStorage.setItem('searchedCity', JSON.stringify(citySaved));
+    loadSearchHistory();
+}
+
+function loadSearchHistory() {
+    var searchHistoryArray = JSON.parse(localStorage.getItem('searchedCity')) 
+    for (j = 0; j < searchHistoryArray.length; j++){       
+    var searchHistory = $("<button class='col-12 btn btn-secondary btn-sm'>").text(searchHistoryArray[j]);
+        searchHistory.attr("id","#search"+ [j])
+        searchHistory.css({"border-radius":"5px", "font-size":"15px"})
+        searchHistory.appendTo(pastCity);
+    }
+}
+
+$("#clear").click(function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    displayRight.css("display","none")
+    $(".no-city").text("")
+    pastCity.empty();
+    localStorage.clear();
+    citySaved=[];
+});
 
 searchBtn.on("click", function(event) {
-    event.preventDefault()
-    currentWeather()
+    event.preventDefault();
+    currentWeather();
 })
+
+
+

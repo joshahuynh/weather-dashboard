@@ -17,6 +17,7 @@
     <div id="content" class="container">
         <div class="row">
             <div id="content-left" class="col-12 col-md-3">
+                <h2 class = "no-city"></h2>
                 <form>
                     <label class="search-city-label">Search for a City:</label>
                     <div class="form-row">
@@ -24,9 +25,10 @@
                         <button class="btn btn-outline-primary my-2" style="width: 100%" type="submit" id="search-button">Search</button>
                     </div>
                 </form>
-                <div id="search-error"></div>
-                <ul id="city-results" style="width: 100%" class="list-group mt-2"></ul>
-                <a id="clear-storage" href="#"></a>    
+                <ul id="city-results" style="list-style: none;" class="list-group mt-6">
+                    <li class="pastCities"></li>
+                    <button type="button" class=" col-12 btn btn-primary btn-sm" id="clear">Clear History</button>
+                </ul>   
             </div>
 
             <div id="content-right" class="col-12 col-md-9">
