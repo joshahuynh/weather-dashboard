@@ -81,6 +81,13 @@ function currentWeather(){
                                     })
                                 }
                             })
+                            .catch(function(error) {
+                                var catchError = $("<p>").text("Unable to connect to OpenWeather One Call API.Check your internet connection.").css("color", "red")
+                                catchError.appendTo(currentPanel)
+                                setTimeout(function() {
+                                    catchError.text("")
+                                }, 2000)
+                            })
                     } else {
                         var error = $("<p>").text("Search had no results, try again!").css("color", "red")
                         error.appendTo(currentPanel)
@@ -90,7 +97,20 @@ function currentWeather(){
                     }       
                     })
             
+            } else {
+                var error = $("<p>").text("Search had no results, try again!").css("color", "red")
+                error.appendTo(currentPanel)
+                setTimeout(function() {
+                     error.text("")
+                }, 1000)
             }
+        })
+        .catch(function(error) {
+            var catchError = $("<p>").text("Unable to connect to OpenWeather One Call API.Check your internet connection.").css("color", "red")
+            catchError.appendTo(currentPanel)
+            setTimeout(function() {
+                catchError.text("")
+            }, 2000)
         })
     }        
 
