@@ -16,15 +16,6 @@
     padding: 16px;
 }
 
-.search-city-label {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-#search-city {
-    width:100%;
-}
-
 #current-weather {
     padding-left: 16px;
 }
@@ -40,22 +31,4 @@
     background-color: #2594f5;
     color: white;
     text-align: center;
-}
-
-.uv-low {
-    background-color: green;
-    border-radius: 2px;
-    color: white;
-}
-
-.uv-mid {
-    background-color: orange;
-    border-radius: 2px;
-    color: white;
-}
-
-.uv-high {
-    background-color: red;
-    border-radius: 2px;
-    color: white;
 }
