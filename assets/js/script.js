@@ -12,11 +12,12 @@ var displayRight = $('#content-right')
 var city;
 
 $(document).ready(function() { 
-    if (localStorage.getItem('searchedCity')!==null)
+    if (localStorage.getItem('searchedCity')!==null) {
         var storage = JSON.parse(localStorage.getItem("searchedCity"))
-        citySaved.push(storage);
+        citySaved.push(...storage);
         loadSearchHistory();
-    searchBtn.on("click",function(event){
+    }   
+    searchBtn.on("click",function(event) {
         event.preventDefault();
         city = $(searchCity).val();
         citySaved.unshift(city)
@@ -168,13 +169,3 @@ $("#clear").click(function(event){
     localStorage.clear();
     citySaved=[];
 });
-
-// searchBtn.on("click", function(event) {
-//     currentPanel.empty();
-//     fiveDayForecast.empty();
-//     event.preventDefault();
-//     currentWeather();
-// })
-
-
-
