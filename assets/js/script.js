@@ -10,6 +10,7 @@ var searchCityLabel = $("search-city-label")
 var pastCity = $(".pastCities")
 var displayRight = $('#content-right')
 var city;
+var noCity = $('.no-city')
 
 $(document).ready(function() { 
     if (localStorage.getItem('searchedCity')!==null) {
@@ -19,13 +20,20 @@ $(document).ready(function() {
     }   
     searchBtn.on("click",function(event) {
         event.preventDefault();
-        city = $(searchCity).val();
-        citySaved.unshift(city)
-        searchCity.val('')
-        currentPanel.empty();
-        fiveDayForecast.empty();
-        saveLocalStorage();
-        currentWeather();
+        if (searchCity.val() == '') {
+            noCity.text("Please enter a city.")
+            setTimeout(function(){
+                noCity.text('')
+            }, 1000)
+        } else {
+            city = $(searchCity).val();
+            citySaved.unshift(city)
+            searchCity.val('')
+            currentPanel.empty();
+            fiveDayForecast.empty();
+            saveLocalStorage();
+            currentWeather();
+        }
     })
 })    
 
@@ -84,7 +92,7 @@ function currentWeather(){
                                         var forecastDiv = $('<div class= "row">').css({"display":"flex", "margin-left":"10px"})
                                         for (var i = 1; i < 6; i++) {
                                             var fiveDayIcon = response.daily[i].weather[0].icon
-                                            var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px"})
+                                            var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px 10px 5px 0"})
                                             var dailyTemp = $('<p>').text("Temp: " + (response.daily[i].temp.day) + "°F")
                                             var iconimg = $('<img>').attr("src", "https://openweathermap.org/img/wn/"+fiveDayIcon+"@2x.png")
                                             var dailyDate = $('<p>').text(moment.unix(response.daily[i].dt).format("MM/DD/YYYY"))
@@ -122,7 +130,7 @@ function currentWeather(){
                 var error = $("<p>").text("Search had no results, try again!").css("color", "red")
                 error.appendTo(currentPanel)
                 setTimeout(function() {
-                     error.text("")
+                    error.text("")
                 }, 1000)
             }
         })

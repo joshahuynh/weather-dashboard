@@ -18,6 +18,7 @@
 
 #current-weather {
     padding-left: 16px;
+    margin-left: 2px;
 }
 
 #clear-storage {
@@ -26,9 +27,40 @@
     font-size: 12px;
 }
 
-.weather-card {
-    width: 150px;
-    background-color: #2594f5;
-    color: white;
-    text-align: center;
+#clear {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#search-button {
+    margin-left: 5px;
+}
+
+#search-city {
+    margin-left: 5px;
+}
+
+ul {
+    border-top: solid 2px rgb(224, 220, 220)  ;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+.search {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search-city-label {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.no-city {
+    font-size: 20px;
+    color: red;
+}
+
+#five-day-forecast {
+    margin-top: 10px;
 }
