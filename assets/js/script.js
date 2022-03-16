@@ -1,3 +1,4 @@
+// define variables
 var apiKey = "b1230e9ae6629f281894dc4555b0c16d";
 var currentPanel = $("#current-weather");
 var fiveDayForecast = $("#five-day-forecast");
@@ -12,12 +13,14 @@ var displayRight = $('#content-right')
 var city;
 var noCity = $('.no-city')
 
+// load past search history
 $(document).ready(function() { 
     if (localStorage.getItem('searchedCity')!==null) {
         var storage = JSON.parse(localStorage.getItem("searchedCity"))
         citySaved.push(...storage);
         loadSearchHistory();
     }   
+    // if statement to check for valid input
     searchBtn.on("click",function(event) {
         event.preventDefault();
         if (searchCity.val() == '') {
@@ -37,6 +40,7 @@ $(document).ready(function() {
     })
 })    
 
+// fetch current weather data
 function currentWeather(){
     var queryURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&appid="+apiKey
     fetch(queryURL)
@@ -56,6 +60,7 @@ function currentWeather(){
                                 if (res.ok) {
                                     res.json()
                                     .then(function(response) {
+                                        // build current weather display
                                         displayRight.css("display", "")
                                         var icon = response.current.weather[0].icon
                                         var dayPanel = $('<div class="dayPanel">').css({"display":"flex", "justify-content":"space-between"})
@@ -67,7 +72,7 @@ function currentWeather(){
                                         img.appendTo(dayPanel)
                                         date.appendTo(dayPanel)
                                         dayPanel.appendTo(currentPanel)
-
+                                        // add text to current weather display
                                         var temp = $('<p>').text("Temp: " + response.current.temp + " °F")
                                         var wind = $('<p>').text("Wind: " + response.current.wind_speed + " mph")
                                         var humidity = $('<p>').text("Humidity: " + response.current.humidity + " %")
@@ -79,6 +84,7 @@ function currentWeather(){
                                         uvIndex.appendTo(currentPanel)
                                         uvi.appendTo(uvIndex)
                                         var uv = response.current.uvi;
+                                        // if statement to color code uv index
                                         if (uv<=2) {
                                             uvi.css("background-color", "green")
                                         } else if (uv>2 && uv<=5) {
@@ -89,8 +95,10 @@ function currentWeather(){
                                             uvi.css("background-color", "red")
                                         }
 
+                                        // five day forecast styling
                                         var fiveDayHeader = $('<h3 class="five-day">').text("5-Day Forecast").css("margin-left", "5px")
                                         var forecastDiv = $('<div class= "row">').css({"display":"flex", "margin-left":"10px"})
+                                        // loop to create weather cards
                                         for (var i = 1; i < 6; i++) {
                                             var fiveDayIcon = response.daily[i].weather[0].icon
                                             var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px 10 px 5px 0"})
@@ -109,6 +117,7 @@ function currentWeather(){
                                             forecastDiv.appendTo(fiveDayForecast)
                                         }
                                     })
+                                // response to invaild inputs
                                 } else {
                                     var error = $("<p>").text("Search had no results, try again!").css("color", "red")
                                     displayRight.css("display","")
@@ -118,6 +127,7 @@ function currentWeather(){
                                     }, 1000)
                                 }
                             })
+                            // catch error when unable to connect to OpenWeather API
                             .catch(function(error) {
                                 var catchError = $("<p>").text("Unable to connect to OpenWeather One Call API.Check your internet connection.").css("color", "red")
                                 displayRight.css("display","")
@@ -155,6 +165,7 @@ function currentWeather(){
         })
 }
 
+// save to local storage
 var saveLocalStorage = function() {
     pastCity.empty()
     localStorage.setItem('searchedCity', JSON.stringify(citySaved));
@@ -162,6 +173,7 @@ var saveLocalStorage = function() {
     loadSearchHistory();
 }
 
+// loop to create search history list
 function loadSearchHistory() {
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchedCity'))
     console.log(searchHistoryArray)
@@ -173,6 +185,7 @@ function loadSearchHistory() {
     }
 }
 
+// create button for search history list 
 $("ul").on("click", "button", function(event) {
     event.preventDefault();
     city = $(this).text();
@@ -181,6 +194,7 @@ $("ul").on("click", "button", function(event) {
     currentWeather();
 })
 
+// clear button
 $("#clear").click(function(event){
     event.preventDefault();
     event.stopPropagation();
