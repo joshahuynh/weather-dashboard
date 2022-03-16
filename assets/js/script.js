@@ -13,8 +13,8 @@ var displayRight = $('#content-right')
 var city;
 var noCity = $('.no-city')
 
-// load past search history
 $(document).ready(function() { 
+    // load past search history
     if (localStorage.getItem('searchedCity')!==null) {
         var storage = JSON.parse(localStorage.getItem("searchedCity"))
         citySaved.push(...storage);
@@ -46,11 +46,9 @@ function currentWeather(){
     fetch(queryURL)
         .then(function(response){
             if (response.ok) {
-                console.log("click")
                 response.json()
                 .then(function(data) { 
                     if (data.length > 0) {
-                        console.log(data) 
                         var lat = data[0].lat
                         var lon = data[0].lon
                         currentCity = data[0].name
@@ -176,7 +174,6 @@ var saveLocalStorage = function() {
 // loop to create search history list
 function loadSearchHistory() {
     var searchHistoryArray = JSON.parse(localStorage.getItem('searchedCity'))
-    console.log(searchHistoryArray)
     for (j = 0; j < searchHistoryArray.length; j++){       
     var searchHistory = $("<button class='col-12 btn btn-secondary btn-sm'>").text(searchHistoryArray[j]);
         searchHistory.attr("id","#search"+ [j])
@@ -185,7 +182,7 @@ function loadSearchHistory() {
     }
 }
 
-// create button for search history list 
+// identify which button was clicked in search history
 $("ul").on("click", "button", function(event) {
     event.preventDefault();
     city = $(this).text();
