@@ -42,9 +42,11 @@ function currentWeather(){
     fetch(queryURL)
         .then(function(response){
             if (response.ok) {
+                console.log("click")
                 response.json()
                 .then(function(data) { 
-                    if (data.length > 0) {  
+                    if (data.length > 0) {
+                        console.log(data) 
                         var lat = data[0].lat
                         var lon = data[0].lon
                         currentCity = data[0].name
@@ -66,9 +68,9 @@ function currentWeather(){
                                         date.appendTo(dayPanel)
                                         dayPanel.appendTo(currentPanel)
 
-                                        var temp = $('<p>').text("Temp: " + response.current.temp + "°F")
-                                        var wind = $('<p>').text("Wind: " + response.current.wind_speed + "mph")
-                                        var humidity = $('<p>').text("Humidity: " + response.current.humidity + "%")
+                                        var temp = $('<p>').text("Temp: " + response.current.temp + " °F")
+                                        var wind = $('<p>').text("Wind: " + response.current.wind_speed + " mph")
+                                        var humidity = $('<p>').text("Humidity: " + response.current.humidity + " %")
                                         var uvIndex = $('<p>').text("UV Index: ")
                                         var uvi = $('<span>').text(response.current.uvi)
                                         temp.appendTo(currentPanel)
@@ -76,7 +78,6 @@ function currentWeather(){
                                         humidity.appendTo(currentPanel)
                                         uvIndex.appendTo(currentPanel)
                                         uvi.appendTo(uvIndex)
-                                
                                         var uv = response.current.uvi;
                                         if (uv<=2) {
                                             uvi.css("background-color", "green")
@@ -93,11 +94,11 @@ function currentWeather(){
                                         for (var i = 1; i < 6; i++) {
                                             var fiveDayIcon = response.daily[i].weather[0].icon
                                             var daily = $('<div class="col-11 col-md-3 col-sm-4">').css({"border":"solid 2px grey", "border-radius":"5px", "background-color":"beige", "margin":"5px 10 px 5px 0"})
-                                            var dailyTemp = $('<p>').text("Temp: " + (response.daily[i].temp.day) + "°F")
+                                            var dailyTemp = $('<p>').text("Temp: " + (response.daily[i].temp.day) + " °F")
                                             var iconimg = $('<img>').attr("src", "https://openweathermap.org/img/wn/"+fiveDayIcon+"@2x.png")
                                             var dailyDate = $('<p>').text(moment.unix(response.daily[i].dt).format("MM/DD/YYYY"))
-                                            var dailyhumidity = $('<p>').text("Humidity: " + (response.daily[i].humidity) + "%")
-                                            var dailyWind = $('<p>').text("Wind: " + (response.daily[i].wind_speed) + "mph")
+                                            var dailyhumidity = $('<p>').text("Humidity: " + (response.daily[i].humidity) + " %")
+                                            var dailyWind = $('<p>').text("Wind: " + (response.daily[i].wind_speed) + " mph")
                                             dailyDate.appendTo(daily)
                                             iconimg.appendTo(daily)
                                             dailyTemp.appendTo(daily)
@@ -108,10 +109,18 @@ function currentWeather(){
                                             forecastDiv.appendTo(fiveDayForecast)
                                         }
                                     })
+                                } else {
+                                    var error = $("<p>").text("Search had no results, try again!").css("color", "red")
+                                    displayRight.css("display","")
+                                    error.appendTo(currentPanel)
+                                    setTimeout(function() {
+                                        error.text("")
+                                    }, 1000)
                                 }
                             })
                             .catch(function(error) {
                                 var catchError = $("<p>").text("Unable to connect to OpenWeather One Call API.Check your internet connection.").css("color", "red")
+                                displayRight.css("display","")
                                 catchError.appendTo(currentPanel)
                                 setTimeout(function() {
                                     catchError.text("")
@@ -119,6 +128,7 @@ function currentWeather(){
                             })
                     } else {
                         var error = $("<p>").text("Search had no results, try again!").css("color", "red")
+                        displayRight.css("display","")
                         error.appendTo(currentPanel)
                         setTimeout(function() {
                             error.text("")
@@ -128,6 +138,7 @@ function currentWeather(){
             
             } else {
                 var error = $("<p>").text("Search had no results, try again!").css("color", "red")
+                displayRight.css("display","")
                 error.appendTo(currentPanel)
                 setTimeout(function() {
                     error.text("")
@@ -136,6 +147,7 @@ function currentWeather(){
         })
         .catch(function(error) {
             var catchError = $("<p>").text("Unable to connect to OpenWeather One Call API.Check your internet connection.").css("color", "red")
+            displayRight.css("display","")
             catchError.appendTo(currentPanel)
             setTimeout(function() {
                 catchError.text("")
